@@ -1,0 +1,21 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.main-content {
+  padding: 20px;
+  width: 100%;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .page-container {
+    flex-direction: row;
+  }
+  
+  .main-content {
+    padding: 30px;
+  }
+}
