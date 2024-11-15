@@ -4,17 +4,25 @@ import { css } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSongsRequest, searchSongsRequest, addSongToPlaylist, toggleFavorite } from '../components/SongSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faPlus, faPlay, faPause } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 const Home = () => {
   const dispatch = useDispatch();
   const { songs, loading, error } = useSelector((state) => state.songs);
   const favorites = useSelector((state) => state.songs.favorites);
+
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newSong, setNewSong] = useState({ name: '', artist: '', album: '', poster: '', previewUrl: '' });
-  const [audioSrc, setAudioSrc] = useState(null); 
+  const [newSong, setNewSong] = useState({
+    name: '',
+    artist: '',
+    album: '',
+    poster: '',
+    preview_url: '',
+  });
+  const [audio, setAudio] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     dispatch(fetchSongsRequest());
@@ -31,96 +39,79 @@ const Home = () => {
 
   const handleCreateSong = async (event) => {
     event.preventDefault();
-    if (!newSong.name || !newSong.artist || !newSong.album || !newSong.poster || !newSong.preview_url) {
+    const { name, artist, album, poster, preview_url } = newSong;
+
+    if (!name || !artist || !album || !poster || !preview_url) {
       alert('Please fill in all fields.');
       return;
     }
 
     try {
       const response = await axios.post('https://server-62ul.onrender.com/songs', newSong);
-
       if (response.status === 201) {
         dispatch(addSongToPlaylist(response.data));
         setNewSong({ name: '', artist: '', album: '', poster: '', preview_url: '' });
         setShowCreateForm(false);
       }
     } catch (error) {
-      console.error('Error creating song:', error.response ? error.response.data : error.message);
+      console.error('Error creating song:', error.message || error.response?.data);
       alert('Failed to add song. Please try again.');
     }
   };
-// Function to play preview or full audio
-const handlePlayAudio = (song) => {
-  const audioUrl = audioSrc === song.preview_url ? song.fullAudioUrl : song.previewUrl;
-  
-  setAudioSrc(audioSrc === audioUrl ? null : audioUrl);
-};
 
+  const handlePlayAudio = (song) => {
+    if (audio && audio.src === song.preview_url) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      const newAudio = new Audio(song.preview_url);
+      newAudio.play();
+      setAudio(newAudio);
+      setIsPlaying(true);
+
+      newAudio.onended = () => {
+        setIsPlaying(false);
+        setAudio(null);
+      };
+    }
+  };
 
   return (
-    <div css={styles.homeContainerStyle}>
-      <form onSubmit={handleSearch} css={styles.searchFormStyle}>
+    <div css={styles.container}>
+      <form onSubmit={handleSearch} css={styles.searchForm}>
         <input
           type="text"
           placeholder="Search for songs..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          css={styles.searchInputStyle}
+          css={styles.searchInput}
         />
-        <button type="submit" css={styles.searchButtonStyle}>Search</button>
+        <button type="submit" css={styles.searchButton}>Search</button>
       </form>
 
-      <button onClick={() => setShowCreateForm(true)} css={styles.searchButtonStyle}>
-        <FontAwesomeIcon icon={faPlus} />
+      <button onClick={() => setShowCreateForm(true)} css={styles.addSongButton}>
+        <FontAwesomeIcon icon={faPlus} /> Add New Song
       </button>
-      <span css={styles.addNewSongTextStyle}>Add New Song</span>
 
       {showCreateForm && (
-        <div css={styles.modalOverlayStyle} onClick={() => setShowCreateForm(false)}>
-          <div css={styles.modalContentStyle} onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setShowCreateForm(false)} css={styles.closeModalButtonStyle}>&times;</button>
+        <div css={styles.modalOverlay} onClick={() => setShowCreateForm(false)}>
+          <div css={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setShowCreateForm(false)} css={styles.closeModalButton}>
+              &times;
+            </button>
             <form onSubmit={handleCreateSong}>
-              <input
-                type="text"
-                placeholder="Song Name"
-                value={newSong.name}
-                onChange={(e) => setNewSong({ ...newSong, name: e.target.value })}
-                required
-                css={styles.inputStyle}
-              />
-              <input
-                type="text"
-                placeholder="Artist"
-                value={newSong.artist}
-                onChange={(e) => setNewSong({ ...newSong, artist: e.target.value })}
-                required
-                css={styles.inputStyle}
-              />
-              <input
-                type="text"
-                placeholder="Album"
-                value={newSong.album}
-                onChange={(e) => setNewSong({ ...newSong, album: e.target.value })}
-                required
-                css={styles.inputStyle}
-              />
-              <input
-                type="text"
-                placeholder="Poster URL"
-                value={newSong.poster}
-                onChange={(e) => setNewSong({ ...newSong, poster: e.target.value })}
-                required
-                css={styles.inputStyle}
-              />
-              <input
-                type="text"
-                placeholder="Preview URL"
-                value={newSong.preview_url}
-                onChange={(e) => setNewSong({ ...newSong, preview_url: e.target.value })}
-                required
-                css={styles.inputStyle}
-              />
-              <button type="submit" css={styles.addButtonStyle}>Add To Playlist</button>
+              {['name', 'artist', 'album', 'poster', 'preview_url'].map((field) => (
+                <input
+                  key={field}
+                  type="text"
+                  placeholder={field.replace('_', ' ').toUpperCase()}
+                  value={newSong[field]}
+                  onChange={(e) => setNewSong({ ...newSong, [field]: e.target.value })}
+                  required
+                  css={styles.inputField}
+                />
+              ))}
+              <button type="submit" css={styles.submitButton}>Add to Playlist</button>
             </form>
           </div>
         </div>
@@ -129,29 +120,27 @@ const handlePlayAudio = (song) => {
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
-      {/* Audio playback controls */}
-      {audioSrc && (
-        <div css={styles.audioContainerStyle}>
-          <audio controls autoPlay src={audioSrc} onEnded={() => setAudioSrc(null)} css={styles.audioStyle} />
-        </div>
-      )}
-
-      <div css={styles.songsListStyle}>
-        {songs.slice(0, 10).map((song) => (
-          <div key={song.id} css={styles.songItemStyle} onClick={() => handlePlayAudio(song)}>
-            <img src={song.poster} alt={`${song.name} poster`} css={styles.songPosterStyle} />
+      <div css={styles.songGrid}>
+        {songs.map((song) => (
+          <div key={song.id} css={styles.songCard}>
+            <img src={song.poster} alt={`${song.name} poster`} css={styles.songPoster} />
             <h2>{song.name}</h2>
             <p>{song.artist}</p>
             <p>{song.album}</p>
-            <div 
-              css={styles.heartStyle} 
-              className={favorites.includes(song.id) ? 'active' : ''} 
+            <FontAwesomeIcon
+              icon={favorites.includes(song.id) ? faHeart : faHeart}
+              css={[styles.favoriteIcon, favorites.includes(song.id) && styles.activeFavorite]}
               onClick={(e) => {
+                e.stopPropagation();
                 handleToggleFavorite(song.id);
               }}
+            />
+            <button
+              onClick={() => handlePlayAudio(song)}
+              css={styles.playButton}
             >
-              <FontAwesomeIcon icon={faHeart} />
-            </div>
+              <FontAwesomeIcon icon={isPlaying && audio?.src === song.preview_url ? faPause : faPlay} />
+            </button>
           </div>
         ))}
       </div>
