@@ -13,7 +13,7 @@ const Home = () => {
   const favorites = useSelector((state) => state.songs.favorites);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newSong, setNewSong] = useState({ name: '', artist: '', album: '', poster: '', previewUrl: '' });
+  const [newSong, setNewSong] = useState({ name: '', artist: '', album: '', poster: '', preview_url: '' });
   const [audioSrc, setAudioSrc] = useState(null); 
 
   useEffect(() => {
