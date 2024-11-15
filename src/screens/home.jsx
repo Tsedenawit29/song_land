@@ -158,3 +158,252 @@ const handlePlayAudio = (song) => {
     </div>
   );
 };
+  // Styles
+const styles = { 
+  homeContainerStyle: css`
+    padding: 20px;
+    margin-left: 140px;
+    margin-right: auto;
+    max-width: 1200px;
+    background-color: black;
+    font-family: 'Arial', sans-serif;
+    color: pink;
+
+    @media (max-width: 768px) {
+      padding: 15px;
+      margin-right:40px;
+    }
+
+    @media (max-width: 480px) {
+      padding: 10px;
+    }
+  `,
+
+  searchFormStyle: css`
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-direction: row;
+    align-items: center;
+
+    @media (max-width: 480px) {
+      flex-direction: row;
+      gap:2px;
+    }
+  `,
+
+  searchInputStyle: css`
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 300px;
+    font-size: 1em;
+    color: pink;
+    background: #333;
+
+    @media (max-width: 768px) {
+      width: 250px;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 480px) {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 10px;
+    }
+  `,
+
+  searchButtonStyle: css`
+    padding: 12px 25px;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s, transform 0.2s;
+
+    &:hover {
+      background-color: #ff0066;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      padding: 10px 20px;
+      font-size: 0.6em;
+    }
+
+  `,
+
+  addNewSongTextStyle: css`
+    margin-left: 10px;
+    font-size: 1em;
+    color: lightgray;
+
+    @media (max-width: 480px) {
+      margin-top: 10px;
+    }
+  `,
+
+  songsListStyle: css`
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  `,
+
+  songItemStyle: css`
+    position: relative;
+    border: 1px solid pink;
+    border-radius: 5px;
+    padding: 15px;
+    margin: 10px 0;
+    transition: box-shadow 0.3s, transform 0.2s;
+    background: #222;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+
+    h2 {
+      color: pink;
+      font-size: 1.5em;
+      margin: 10px 0;
+
+      @media (max-width: 480px) {
+        font-size: 1.2em;
+      }
+    }
+
+    p {
+      color: lightgray;
+      font-size: 1em;
+      margin: 5px 0;
+
+      @media (max-width: 480px) {
+        font-size: 0.9em;
+      }
+    }
+  `,
+
+  songPosterStyle: css`
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+  `,
+
+  heartStyle: css`
+    cursor: pointer;
+    color: gray;
+    transition: color 0.3s ease;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    &.active {
+      color: #ff0066;
+    }
+  `,
+
+  audioContainerStyle: css`
+    margin: 20px 0;
+    text-align: center;
+    background: #000;
+    border-radius: 5px;
+    padding: 10px;
+
+    @media (max-width: 768px) {
+      padding: 5px;
+    }
+  `,
+
+  audioStyle: css`
+    width: 100%;
+    background: #000; /* Change the color of the playback control */
+  `,
+
+  modalOverlayStyle: css`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  `,
+
+  modalContentStyle: css`
+    background: #222;
+    padding: 30px;
+    border-radius: 10px;
+    width: 400px;
+    max-width: 90%;
+    color: pink;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  `,
+
+  closeModalButtonStyle: css`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1.5em;
+    cursor: pointer;
+  `,
+
+  inputStyle: css`
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid pink;
+    border-radius: 5px;
+    background: #444;
+    color: white;
+
+    @media (max-width: 480px) {
+      padding: 8px;
+    }
+  `,
+
+  addButtonStyle: css`
+    padding: 12px;
+    background-color: #ff0066;
+    color: pink;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    width: 100%;
+
+    &:hover {
+      background-color: #e60058;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 480px) {
+      padding: 10px;
+    }
+  `
+};
+export default Home;
