@@ -21,8 +21,6 @@ const Home = () => {
     poster: '',
     preview_url: '',
   });
-  const [audio, setAudio] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     dispatch(fetchSongsRequest());
@@ -56,23 +54,6 @@ const Home = () => {
     } catch (error) {
       console.error('Error creating song:', error.message || error.response?.data);
       alert('Failed to add song. Please try again.');
-    }
-  };
-
-  const handlePlayAudio = (song) => {
-    if (audio && audio.src === song.preview_url) {
-      audio.pause();
-      setIsPlaying(false);
-    } else {
-      const newAudio = new Audio(song.preview_url);
-      newAudio.play();
-      setAudio(newAudio);
-      setIsPlaying(true);
-
-      newAudio.onended = () => {
-        setIsPlaying(false);
-        setAudio(null);
-      };
     }
   };
 
@@ -128,19 +109,17 @@ const Home = () => {
             <p>{song.artist}</p>
             <p>{song.album}</p>
             <FontAwesomeIcon
-              icon={favorites.includes(song.id) ? faHeart : faHeart}
+              icon={faHeart}
               css={[styles.favoriteIcon, favorites.includes(song.id) && styles.activeFavorite]}
               onClick={(e) => {
                 e.stopPropagation();
                 handleToggleFavorite(song.id);
               }}
             />
-            <button
-              onClick={() => handlePlayAudio(song)}
-              css={styles.playButton}
-            >
-              <FontAwesomeIcon icon={isPlaying && audio?.src === song.preview_url ? faPause : faPlay} />
-            </button>
+            <audio controls css={styles.audioStyle}>
+              <source src={song.preview_url} type="audio/mpeg" />
+              Your browser does not support the audio element.
+            </audio>
           </div>
         ))}
       </div>
