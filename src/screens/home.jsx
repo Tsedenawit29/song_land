@@ -51,9 +51,8 @@ const Home = () => {
   };
 // Function to play preview or full audio
 const handlePlayAudio = (song) => {
-  const audioUrl = audioSrc === song.preview_url ? song.fullAudioUrl : song.previewUrl;
-  
-  setAudioSrc(audioSrc === audioUrl ? null : audioUrl);
+  const audioUrl = song.fullAudioUrl || song.previewUrl; // Prioritize the full audio URL if available
+  setAudioSrc(audioSrc === audioUrl ? null : audioUrl); // Toggle playback
 };
 
 
