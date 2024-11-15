@@ -130,7 +130,7 @@ const Home = () => {
 const styles = { 
   homeContainerStyle: css`
     padding: 20px;
-    margin-left: 140px;
+    margin-left: 300px;
     margin-right: auto;
     max-width: 1200px;
     background-color: black;
