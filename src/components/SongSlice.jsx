@@ -3,25 +3,26 @@ import { fetchSongs, fetchSongsBySearch, deleteSong, createSong, updateSong } fr
 
 // Async actions for fetching, searching, deleting, creating, and updating songs
 export const fetchSongsRequest = createAsyncThunk('songs/fetchSongs', async () => {
-  return await fetchSongs(); 
+  return await fetchSongs();
 });
 
 export const searchSongsRequest = createAsyncThunk('songs/searchSongs', async (searchTerm) => {
-  return await fetchSongsBySearch(searchTerm); 
+  return await fetchSongsBySearch(searchTerm);
 });
 
 export const deleteSongRequest = createAsyncThunk('songs/deleteSong', async (id) => {
-  await deleteSong(id); 
-  return id; 
+  await deleteSong(id);
+  return id;
 });
 
 export const createSongRequest = createAsyncThunk('songs/createSong', async (newSong) => {
-  return await createSong(newSong); 
+  return await createSong(newSong);
 });
 
 export const updateSongRequest = createAsyncThunk('songs/updateSong', async (updatedSong) => {
-  return await updateSong(updatedSong); 
+  return await updateSong(updatedSong);
 });
+
 const songsSlice = createSlice({
   name: 'songs',
   initialState: {
@@ -47,24 +48,28 @@ const songsSlice = createSlice({
           playlist.songs.push(songId);
         }
       } else {
-        // Create a new playlist 
+        // Create a new playlist
         state.playlists.push({ id: playlistId, songs: [songId] });
       }
     },
-    
+
     addToHistory: (state, action) => {
       const songId = action.payload;
       if (!state.history.includes(songId)) {
         state.history.push(songId); // Add song to history
       }
     },
-    
+
     setSelectedSong: (state, action) => {
       state.selectedSong = action.payload; // Set the selected song
     },
 
     setAudioState: (state, action) => {
-      state.audioState = { ...state.audioState, ...action.payload }; // Update audio state
+      state.audioState = {
+        ...state.audioState,
+        ...action.payload,
+        currentSongUrl: action.payload.currentSong?.fullAudioUrl || null, // Set the current song URL
+      };
     },
 
     clearHistory: (state) => {
@@ -88,11 +93,14 @@ const songsSlice = createSlice({
       })
       .addCase(fetchSongsRequest.fulfilled, (state, action) => {
         state.loading = false;
-        state.songs = action.payload; // Set the fetched songs
+        state.songs = action.payload.map(song => ({
+          ...song,
+          fullAudioUrl: song.fullAudioUrl || '', // Include fullAudioUrl field
+        }));
       })
       .addCase(fetchSongsRequest.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message; 
+        state.error = action.error.message;
         console.error('Error fetching songs:', action.error.message);
       })
       .addCase(searchSongsRequest.pending, (state) => {
@@ -101,11 +109,14 @@ const songsSlice = createSlice({
       })
       .addCase(searchSongsRequest.fulfilled, (state, action) => {
         state.loading = false;
-        state.songs = action.payload; // Set searched songs
+        state.songs = action.payload.map(song => ({
+          ...song,
+          fullAudioUrl: song.fullAudioUrl || '', // Include fullAudioUrl for searched songs
+        }));
       })
       .addCase(searchSongsRequest.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message; 
+        state.error = action.error.message;
         console.error('Error searching songs:', action.error.message);
       })
       .addCase(deleteSongRequest.pending, (state) => {
@@ -115,38 +126,44 @@ const songsSlice = createSlice({
       .addCase(deleteSongRequest.fulfilled, (state, action) => {
         const songId = action.payload;
         state.songs = state.songs.filter(song => song.id !== songId); // Remove the deleted song
-        state.loading = false; // End loading state
+        state.loading = false;
       })
       .addCase(deleteSongRequest.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message; 
-        console.error('Error deleting song:', action.error.message); 
+        state.error = action.error.message;
+        console.error('Error deleting song:', action.error.message);
       })
       .addCase(createSongRequest.fulfilled, (state, action) => {
-        state.songs.push(action.payload); // Add the newly created song
+        state.songs.push({
+          ...action.payload,
+          fullAudioUrl: action.payload.fullAudioUrl || '', // Ensure fullAudioUrl is included
+        });
       })
       .addCase(createSongRequest.rejected, (state, action) => {
-        state.error = action.error.message; 
-        console.error('Error creating song:', action.error.message); 
+        state.error = action.error.message;
+        console.error('Error creating song:', action.error.message);
       })
       .addCase(updateSongRequest.fulfilled, (state, action) => {
         const updatedSong = action.payload;
         const index = state.songs.findIndex(song => song.id === updatedSong.id);
         if (index !== -1) {
-          state.songs[index] = updatedSong; // Update the song in the songs array
+          state.songs[index] = {
+            ...updatedSong,
+            fullAudioUrl: updatedSong.fullAudioUrl || state.songs[index].fullAudioUrl, // Update fullAudioUrl
+          };
         }
       });
   },
 });
 
 // Export the actions
-export const { 
-  setSelectedSong, 
-  toggleFavorite, 
-  addToHistory, 
-  clearHistory, 
-  setAudioState, 
-  addSongToPlaylist 
+export const {
+  setSelectedSong,
+  toggleFavorite,
+  addToHistory,
+  clearHistory,
+  setAudioState,
+  addSongToPlaylist,
 } = songsSlice.actions;
 
 export default songsSlice.reducer;
