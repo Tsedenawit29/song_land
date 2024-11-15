@@ -13,7 +13,7 @@ const Home = () => {
   const favorites = useSelector((state) => state.songs.favorites);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newSong, setNewSong] = useState({ name: '', artist: '', album: '', poster: '', preview_url: '' });
+  const [newSong, setNewSong] = useState({ name: '', artist: '', album: '', poster: '', previewUrl: '' });
   const [audioSrc, setAudioSrc] = useState(null); 
 
   useEffect(() => {
@@ -116,7 +116,7 @@ const handlePlayAudio = (song) => {
                 type="text"
                 placeholder="Preview URL"
                 value={newSong.preview_url}
-                onChange={(e) => setNewSong({ ...newSong, preview_url: e.target.value })}
+                onChange={(e) => setNewSong({ ...newSong, previewUrl: e.target.value })}
                 required
                 css={styles.inputStyle}
               />
