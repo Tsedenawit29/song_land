@@ -101,7 +101,7 @@ const Home = () => {
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
 
-      <div css={styles.songGrid}>
+      <div css={styles.songListStyle}>
         {songs.map((song) => (
           <div key={song.id} css={styles.songCard}>
             <img src={song.poster} alt={`${song.name} poster`} css={styles.songPoster} />
