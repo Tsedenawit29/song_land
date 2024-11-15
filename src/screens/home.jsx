@@ -51,7 +51,7 @@ const Home = () => {
   };
 // Function to play preview or full audio
 const handlePlayAudio = (song) => {
-  const audioUrl = audioSrc === song.preview_url ? song.fullAudioUrl : song.preview_url;
+  const audioUrl = audioSrc === song.preview_url ? song.fullAudioUrl : song.previewUrl;
   
   setAudioSrc(audioSrc === audioUrl ? null : audioUrl);
 };
@@ -116,7 +116,7 @@ const handlePlayAudio = (song) => {
                 type="text"
                 placeholder="Preview URL"
                 value={newSong.preview_url}
-                onChange={(e) => setNewSong({ ...newSong, previewUrl: e.target.value })}
+                onChange={(e) => setNewSong({ ...newSong, preview_url: e.target.value })}
                 required
                 css={styles.inputStyle}
               />
@@ -171,6 +171,7 @@ const styles = {
 
     @media (max-width: 768px) {
       padding: 15px;
+      margin-right:40px;
     }
 
     @media (max-width: 480px) {
@@ -186,7 +187,8 @@ const styles = {
     align-items: center;
 
     @media (max-width: 480px) {
-      flex-direction: column;
+      flex-direction: row;
+      gap:2px;
     }
   `,
 
@@ -229,8 +231,9 @@ const styles = {
 
     @media (max-width: 768px) {
       padding: 10px 20px;
-      font-size: 0.9em;
+      font-size: 0.6em;
     }
+
   `,
 
   addNewSongTextStyle: css`
