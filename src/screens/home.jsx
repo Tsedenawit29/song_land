@@ -13,7 +13,7 @@ const Home = () => {
   const favorites = useSelector((state) => state.songs.favorites);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [newSong, setNewSong] = useState({ name: '', artist: '', album: '', poster: '', preview_url: '' });
+  const [newSong, setNewSong] = useState({ name: '', artist: '', album: '', poster: '', previewUrl: '' });
   const [audioSrc, setAudioSrc] = useState(null); 
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Home = () => {
   };
 // Function to play preview or full audio
 const handlePlayAudio = (song) => {
-  const audioUrl = audioSrc === song.preview_url ? song.fullAudioUrl : song.preview_url;
+  const audioUrl = audioSrc === song.preview_url ? song.fullAudioUrl : song.previewUrl;
   
   setAudioSrc(audioSrc === audioUrl ? null : audioUrl);
 };
@@ -115,7 +115,7 @@ const handlePlayAudio = (song) => {
               <input
                 type="text"
                 placeholder="Preview URL"
-                value={newSong.preview_url}
+                value={newSong.previewUrl}
                 onChange={(e) => setNewSong({ ...newSong, preview_url: e.target.value })}
                 required
                 css={styles.inputStyle}
