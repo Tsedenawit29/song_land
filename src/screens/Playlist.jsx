@@ -235,7 +235,7 @@ const styles = {
     padding: 20px;
     margin-left:10pxpx;   @media (max-width: 768px) {
       grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+      gap: 25px;
       margin-right:20px;
     }
     @media (max-width: 480px) {
