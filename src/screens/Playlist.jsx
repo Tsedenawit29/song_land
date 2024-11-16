@@ -230,11 +230,11 @@ const styles = {
   `,
   songsContainer: css`
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px;
     margin-left:10pxpx;   @media (max-width: 768px) {
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(2, 1fr);
       gap: 15px;
       margin-right:20px;
     }
