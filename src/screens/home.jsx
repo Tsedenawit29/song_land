@@ -115,7 +115,7 @@ const handlePlayAudio = (song) => {
               <input
                 type="text"
                 placeholder="Preview URL"
-                value={newSong.previewUrl}
+                value={newSong.preview_url}
                 onChange={(e) => setNewSong({ ...newSong, preview_url: e.target.value })}
                 required
                 css={styles.inputStyle}
