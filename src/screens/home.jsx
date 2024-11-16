@@ -116,7 +116,7 @@ const handlePlayAudio = (song) => {
                 type="text"
                 placeholder="Preview URL"
                 value={newSong.previewUrl}
-                onChange={(e) => setNewSong({ ...newSong, preview_url: e.target.value })}
+                onChange={(e) => setNewSong({ ...newSong, previewUrl: e.target.value })}
                 required
                 css={styles.inputStyle}
               />
