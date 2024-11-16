@@ -107,24 +107,6 @@ const styles = {
       padding: 10px;
     }
   `,
-  customPlaylistContainer: css`
-    background-color: #000;
-    color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr 1fr; /* Two columns for smaller screens */
-    }
-
-    @media (max-width: 480px) {
-      grid-template-columns: 1fr; /* One column for very small screens */
-    }
-  `,
   pageTitle: css`
     font-size: 2rem;
     text-align: center;
